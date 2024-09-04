@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERP System Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 20px 0;
+        }
+        .section-title {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 20px 0;
+            text-align: center;
+            color: #333;
+        }
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .scrollable-table {
+            max-height: 300px;
+            overflow-y: auto;
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            font-size: 16px;
+            text-align: left;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            background-color: #ffffff;
+        }
+        th, td {
+            padding: 12px 15px;
+            border: 1px solid #dddddd;
+        }
+        th {
+            background-color: #941d9b;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+        }
+        tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        caption {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="section-title">Dashboard</div>
+    <div class="grid-container">
+        <div class="scrollable-table">
+            <table>
+                <caption>Top RFQs</caption>
+                <thead>
+                    <tr>
+                        <th>RQF</th>
+                        <th>Opened</th>
+                        <th>Buyer</th>
+                        <th>Vendor</th>
+                        <th>Untaxed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>001</td><td>2024-06-27</td><td>John Doe</td><td>Vendor A</td><td>₹500.00</td></tr>
+                    <tr><td>002</td><td>2024-06-28</td><td>Jane Smith</td><td>Vendor B</td><td>₹300.00</td></tr>
+                    <tr><td>003</td><td>2024-06-29</td><td>Jim Brown</td><td>Vendor C</td><td>₹700.00</td></tr>
+                    <tr><td>004</td><td>2024-06-30</td><td>Alice Blue</td><td>Vendor D</td><td>₹200.00</td></tr>
+                    <tr><td>005</td><td>2024-07-01</td><td>Chris Green</td><td>Vendor E</td><td>₹600.00</td></tr>
+                    <tr><td>006</td><td>2024-07-02</td><td>Nancy White</td><td>Vendor F</td><td>₹400.00</td></tr>
+                    <tr><td>007</td><td>2024-07-03</td><td>George Black</td><td>Vendor G</td><td>₹800.00</td></tr>
+                    <tr><td>008</td><td>2024-07-04</td><td>Monica Red</td><td>Vendor H</td><td>₹900.00</td></tr>
+                    <tr><td>009</td><td>2024-07-05</td><td>Tom Yellow</td><td>Vendor I</td><td>₹750.00</td></tr>
+                    <tr><td>010</td><td>2024-07-06</td><td>Susan Purple</td><td>Vendor J</td><td>₹550.00</td></tr>
+                    <tr><td>011</td><td>2024-07-07</td><td>Peter Brown</td><td>Vendor K</td><td>₹650.00</td></tr>
+                    <tr><td>012</td><td>2024-07-08</td><td>Lisa Grey</td><td>Vendor L</td><td>₹350.00</td></tr>
+                    <tr><td>013</td><td>2024-07-09</td><td>Mark Pink</td><td>Vendor M</td><td>₹450.00</td></tr>
+                    <tr><td>014</td><td>2024-07-10</td><td>Lucy Orange</td><td>Vendor N</td><td>₹950.00</td></tr>
+                    <tr><td>015</td><td>2024-07-11</td><td>Simon Teal</td><td>Vendor O</td><td>₹850.00</td></tr>
+                    <tr><td>016</td><td>2024-07-12</td><td>Karen Cyan</td><td>Vendor P</td><td>₹150.00</td></tr>
+                    <tr><td>017</td><td>2024-07-13</td><td>Phil Indigo</td><td>Vendor Q</td><td>₹250.00</td></tr>
+                    <tr><td>018</td><td>2024-07-14</td><td>Betty Violet</td><td>Vendor R</td><td>₹550.00</td></tr>
+                    <tr><td>019</td><td>2024-07-15</td><td>Rob Blue</td><td>Vendor S</td><td>₹350.00</td></tr>
+                    <tr><td>020</td><td>2024-07-16</td><td>Jen Brown</td><td>Vendor T</td><td>₹450.00</td></tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="scrollable-table">
+            <table>
+                <caption>Top Orders</caption>
+                <thead>
+                    <tr>
+                        <th>Order</th>
+                        <th>Ordered On</th>
+                        <th>Buyer</th>
+                        <th>Vendor</th>
+                        <th>Total Untaxed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>101</td><td>2024-06-20</td><td>Mary Lee</td><td>Vendor X</td><td>₹900.00</td></tr>
+                    <tr><td>102</td><td>2024-06-21</td><td>Paul Green</td><td>Vendor Y</td><td>₹450.00</td></tr>
+                    <tr><td>103</td><td>2024-06-22</td><td>Lisa White</td><td>Vendor Z</td><td>₹300.00</td></tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="scrollable-table">
+            <table>
+                <caption>Top Vendors</caption>
+                <thead>
+                    <tr>
+                        <th>Vendor</th>
+                        <th>Orders</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Vendor A</td><td>10</td><td>₹5000.00</td></tr>
+                    <tr><td>Vendor B</td><td>8</td><td>₹4000.00</td></tr>
+                    <tr><td>Vendor C</td><td>15</td><td>₹7500.00</td></tr>
+                    <!-- Add more rows as needed -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="scrollable-table">
+            <table>
+                <caption>Top Buyers</caption>
+                <thead>
+                    <tr>
+                        <th>Buyer</th>
+                        <th>Orders</th>
+                        <th>Qty Ordered</th>
+                        <th>Amount                </th>
+                    </thead>
+                    <tbody>
+                        <tr><td>John Doe</td><td>5</td><td>50</td><td>₹2500.00</td></tr>
+                        <tr><td>Jane Smith</td><td>3</td><td>30</td><td>₹1500.00</td></tr>
+                        <tr><td>Jim Brown</td><td>4</td><td>40</td><td>₹2000.00</td></tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="scrollable-table">
+                <table>
+                    <caption>Top Products</caption>
+                    <thead>
+                        <tr>
+                            <th>Products</th>
+                            <th>Qty Ordered</th>
+                            <th>Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Product 1</td><td>100</td><td>₹1000.00</td></tr>
+                        <tr><td>Product 2</td><td>150</td><td>₹1500.00</td></tr>
+                        <tr><td>Product 3</td><td>200</td><td>₹2000.00</td></tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="section-title">Inventory Flow</div>
+        <div class="grid-container">
+            <div class="scrollable-table">
+                <table>
+                    <caption>Top Products</caption>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Moves</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Product A</td><td>5</td><td>500</td></tr>
+                        <tr><td>Product B</td><td>7</td><td>700</td></tr>
+                        <tr><td>Product C</td><td>9</td><td>900</td></tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="scrollable-table">
+                <table>
+                    <caption>Top Partners</caption>
+                    <thead>
+                        <tr>
+                            <th>Partner</th>
+                            <th>Moves</th>
+                            <th>Quantity</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Partner X</td><td>10</td><td>1000</td></tr>
+                        <tr><td>Partner Y</td><td>12</td><td>1200</td></tr>
+                        <tr><td>Partner Z</td><td>15</td><td>1500</td></tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    
+        <div class="section-title">Manufacturing</div>
+        <div class="grid-container">
+            <div class="scrollable-table">
+                <table>
+                    <caption>Top Products</caption>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Orders</th>
+                            <th>Qty Produced</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Product X</td><td>3</td><td>300</td></tr>
+                        <tr><td>Product Y</td><td>6</td><td>600</td></tr>
+                        <tr><td>Product Z</td><td>9</td><td>900</td></tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+    
+            <div class="scrollable-table">
+                <table>
+                    <caption>Top Responsibles</caption>
+                    <thead>
+                        <tr>
+                            <th>Responsible</th>
+                            <th>Orders</th>
+                            <th>Qty Produced</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Manager 1</td><td>10</td><td>1000</td></tr>
+                        <tr><td>Manager 2</td><td>15</td><td>1500</td></tr>
+                        <tr><td>Manager 3</td><td>20</td><td>2000</td></tr>
+                        <!-- Add more rows as needed -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    </body>
+    </html>
+    
