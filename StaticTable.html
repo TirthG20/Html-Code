@@ -5,276 +5,807 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ERP System Dashboard</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+        * {
             margin: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             padding: 20px;
         }
-        .container {
-            width: 100%;
-            max-width: 1200px;
-            margin: 20px 0;
-        }
-        .section-title {
-            font-size: 28px;
-            font-weight: bold;
-            margin: 20px 0;
+
+        .main-header {
             text-align: center;
-            color: #333;
+            margin-bottom: 40px;
+            color: white;
+            font-size: 3rem;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: slideDown 0.8s ease-out;
         }
+
+        @keyframes slideDown {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            text-align: center;
+            color: #2c3e50;
+            position: relative;
+            padding-bottom: 15px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
         .grid-container {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 25px;
         }
+
+        .table-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .table-container:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.15);
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            text-align: center;
+            position: relative;
+        }
+
         .scrollable-table {
-            max-height: 300px;
+            max-height: 400px;
             overflow-y: auto;
-            display: block;
+            scrollbar-width: thin;
+            scrollbar-color: #667eea #f1f1f1;
         }
+
+        .scrollable-table::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .scrollable-table::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        .scrollable-table::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 4px;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20px;
-            font-size: 16px;
-            text-align: left;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-            background-color: #ffffff;
+            font-size: 14px;
         }
+
         th, td {
-            padding: 12px 15px;
-            border: 1px solid #dddddd;
+            padding: 15px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e8e8e8;
         }
+
         th {
-            background-color: #941d9b;
-            color: #ffffff;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            font-weight: 600;
+            color: #2c3e50;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            user-select: none;
         }
+
+        th:hover {
+            background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+        }
+
+        .sort-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .sort-icon {
+            width: 12px;
+            height: 12px;
+            opacity: 0.5;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+
+        .sort-icon.active {
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .sort-icon.desc {
+            transform: scale(1.2) rotate(180deg);
+        }
+
         tr:nth-of-type(even) {
-            background-color: #f3f3f3;
+            background: rgba(248, 249, 250, 0.8);
         }
+
         tr:hover {
-            background-color: #f1f1f1;
+            background: rgba(102, 126, 234, 0.1);
+            transform: scale(1.01);
+            transition: all 0.2s ease;
         }
-        caption {
-            font-size: 24px;
-            font-weight: bold;
-            margin: 10px;
+
+        td {
+            color: #495057;
+            font-weight: 500;
+        }
+
+        .amount {
+            font-weight: 700;
+            color: #28a745;
+        }
+
+        .rfq-id, .order-id {
+            font-weight: 700;
+            color: #667eea;
+        }
+
+        .date {
+            color: #6c757d;
+            font-size: 13px;
+        }
+
+        @media (max-width: 768px) {
+            .grid-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .main-header {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+            
+            th, td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+        }
+
+        .stats-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <div class="section-title">Dashboard</div>
-    <div class="grid-container">
-        <div class="scrollable-table">
-            <table>
-                <caption>Top RFQs</caption>
-                <thead>
-                    <tr>
-                        <th>RQF</th>
-                        <th>Opened</th>
-                        <th>Buyer</th>
-                        <th>Vendor</th>
-                        <th>Untaxed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>001</td><td>2024-06-27</td><td>John Doe</td><td>Vendor A</td><td>₹500.00</td></tr>
-                    <tr><td>002</td><td>2024-06-28</td><td>Jane Smith</td><td>Vendor B</td><td>₹300.00</td></tr>
-                    <tr><td>003</td><td>2024-06-29</td><td>Jim Brown</td><td>Vendor C</td><td>₹700.00</td></tr>
-                    <tr><td>004</td><td>2024-06-30</td><td>Alice Blue</td><td>Vendor D</td><td>₹200.00</td></tr>
-                    <tr><td>005</td><td>2024-07-01</td><td>Chris Green</td><td>Vendor E</td><td>₹600.00</td></tr>
-                    <tr><td>006</td><td>2024-07-02</td><td>Nancy White</td><td>Vendor F</td><td>₹400.00</td></tr>
-                    <tr><td>007</td><td>2024-07-03</td><td>George Black</td><td>Vendor G</td><td>₹800.00</td></tr>
-                    <tr><td>008</td><td>2024-07-04</td><td>Monica Red</td><td>Vendor H</td><td>₹900.00</td></tr>
-                    <tr><td>009</td><td>2024-07-05</td><td>Tom Yellow</td><td>Vendor I</td><td>₹750.00</td></tr>
-                    <tr><td>010</td><td>2024-07-06</td><td>Susan Purple</td><td>Vendor J</td><td>₹550.00</td></tr>
-                    <tr><td>011</td><td>2024-07-07</td><td>Peter Brown</td><td>Vendor K</td><td>₹650.00</td></tr>
-                    <tr><td>012</td><td>2024-07-08</td><td>Lisa Grey</td><td>Vendor L</td><td>₹350.00</td></tr>
-                    <tr><td>013</td><td>2024-07-09</td><td>Mark Pink</td><td>Vendor M</td><td>₹450.00</td></tr>
-                    <tr><td>014</td><td>2024-07-10</td><td>Lucy Orange</td><td>Vendor N</td><td>₹950.00</td></tr>
-                    <tr><td>015</td><td>2024-07-11</td><td>Simon Teal</td><td>Vendor O</td><td>₹850.00</td></tr>
-                    <tr><td>016</td><td>2024-07-12</td><td>Karen Cyan</td><td>Vendor P</td><td>₹150.00</td></tr>
-                    <tr><td>017</td><td>2024-07-13</td><td>Phil Indigo</td><td>Vendor Q</td><td>₹250.00</td></tr>
-                    <tr><td>018</td><td>2024-07-14</td><td>Betty Violet</td><td>Vendor R</td><td>₹550.00</td></tr>
-                    <tr><td>019</td><td>2024-07-15</td><td>Rob Blue</td><td>Vendor S</td><td>₹350.00</td></tr>
-                    <tr><td>020</td><td>2024-07-16</td><td>Jen Brown</td><td>Vendor T</td><td>₹450.00</td></tr>
-                    <!-- Add more rows as needed -->
-                </tbody>
-            </table>
-        </div>
-
-        <div class="scrollable-table">
-            <table>
-                <caption>Top Orders</caption>
-                <thead>
-                    <tr>
-                        <th>Order</th>
-                        <th>Ordered On</th>
-                        <th>Buyer</th>
-                        <th>Vendor</th>
-                        <th>Total Untaxed</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>101</td><td>2024-06-20</td><td>Mary Lee</td><td>Vendor X</td><td>₹900.00</td></tr>
-                    <tr><td>102</td><td>2024-06-21</td><td>Paul Green</td><td>Vendor Y</td><td>₹450.00</td></tr>
-                    <tr><td>103</td><td>2024-06-22</td><td>Lisa White</td><td>Vendor Z</td><td>₹300.00</td></tr>
-                    <!-- Add more rows as needed -->
-                </tbody>
-            </table>
-        </div>
-        
-        <div class="scrollable-table">
-            <table>
-                <caption>Top Vendors</caption>
-                <thead>
-                    <tr>
-                        <th>Vendor</th>
-                        <th>Orders</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr><td>Vendor A</td><td>10</td><td>₹5000.00</td></tr>
-                    <tr><td>Vendor B</td><td>8</td><td>₹4000.00</td></tr>
-                    <tr><td>Vendor C</td><td>15</td><td>₹7500.00</td></tr>
-                    <!-- Add more rows as needed -->
-                </tbody>
-            </table>
-        </div>
-
-        <div class="scrollable-table">
-            <table>
-                <caption>Top Buyers</caption>
-                <thead>
-                    <tr>
-                        <th>Buyer</th>
-                        <th>Orders</th>
-                        <th>Qty Ordered</th>
-                        <th>Amount                </th>
-                    </thead>
-                    <tbody>
-                        <tr><td>John Doe</td><td>5</td><td>50</td><td>₹2500.00</td></tr>
-                        <tr><td>Jane Smith</td><td>3</td><td>30</td><td>₹1500.00</td></tr>
-                        <tr><td>Jim Brown</td><td>4</td><td>40</td><td>₹2000.00</td></tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-            </div>
-    
-            <div class="scrollable-table">
-                <table>
-                    <caption>Top Products</caption>
-                    <thead>
-                        <tr>
-                            <th>Products</th>
-                            <th>Qty Ordered</th>
-                            <th>Amount</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Product 1</td><td>100</td><td>₹1000.00</td></tr>
-                        <tr><td>Product 2</td><td>150</td><td>₹1500.00</td></tr>
-                        <tr><td>Product 3</td><td>200</td><td>₹2000.00</td></tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    <div class="main-header">ERP Dashboard</div>
     
     <div class="container">
-        <div class="section-title">Inventory Flow</div>
-        <div class="grid-container">
-            <div class="scrollable-table">
-                <table>
-                    <caption>Top Products</caption>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Moves</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Product A</td><td>5</td><td>500</td></tr>
-                        <tr><td>Product B</td><td>7</td><td>700</td></tr>
-                        <tr><td>Product C</td><td>9</td><td>900</td></tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
+        <div class="section">
+            <div class="section-title">Sales Overview</div>
+            <div class="grid-container">
+                <div class="table-container">
+                    <div class="table-header">
+                        Top RFQs <span class="stats-badge">20 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="rfq-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('rfq-table', 0)">
+                                        <div class="sort-button">
+                                            RFQ
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('rfq-table', 1)">
+                                        <div class="sort-button">
+                                            Opened
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('rfq-table', 2)">
+                                        <div class="sort-button">
+                                            Buyer
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('rfq-table', 3)">
+                                        <div class="sort-button">
+                                            Vendor
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('rfq-table', 4)">
+                                        <div class="sort-button">
+                                            Amount
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="rfq-id">001</td><td class="date">2024-06-27</td><td>Joy sharma</td><td>Vendor A</td><td class="amount">₹500.00</td></tr>
+                                <tr><td class="rfq-id">002</td><td class="date">2024-06-28</td><td>Shubh Patel</td><td>Vendor B</td><td class="amount">₹300.00</td></tr>
+                                <tr><td class="rfq-id">003</td><td class="date">2024-06-29</td><td>Jimit Shah</td><td>Vendor C</td><td class="amount">₹700.00</td></tr>
+                                <tr><td class="rfq-id">004</td><td class="date">2024-06-30</td><td>Aastha Patel</td><td>Vendor D</td><td class="amount">₹200.00</td></tr>
+                                <tr><td class="rfq-id">005</td><td class="date">2024-07-01</td><td>Cherry Soni</td><td>Vendor E</td><td class="amount">₹600.00</td></tr>
+                                <tr><td class="rfq-id">006</td><td class="date">2024-07-02</td><td>Nancy Makawana</td><td>Vendor F</td><td class="amount">₹400.00</td></tr>
+                                <tr><td class="rfq-id">007</td><td class="date">2024-07-03</td><td>Dishant Panchal</td><td>Vendor G</td><td class="amount">₹800.00</td></tr>
+                                <tr><td class="rfq-id">008</td><td class="date">2024-07-04</td><td>Monica Chauhan</td><td>Vendor H</td><td class="amount">₹900.00</td></tr>
+                                <tr><td class="rfq-id">009</td><td class="date">2024-07-05</td><td>Tirth Mehta</td><td>Vendor I</td><td class="amount">₹750.00</td></tr>
+                                <tr><td class="rfq-id">010</td><td class="date">2024-07-06</td><td>Suresh Gohel</td><td>Vendor J</td><td class="amount">₹550.00</td></tr>
+                                <tr><td class="rfq-id">011</td><td class="date">2024-07-07</td><td>Palak Keswani</td><td>Vendor K</td><td class="amount">₹650.00</td></tr>
+                                <tr><td class="rfq-id">012</td><td class="date">2024-07-08</td><td>Lisa chaudhary</td><td>Vendor L</td><td class="amount">₹350.00</td></tr>
+                                <tr><td class="rfq-id">013</td><td class="date">2024-07-09</td><td>Malay Darji</td><td>Vendor M</td><td class="amount">₹450.00</td></tr>
+                                <tr><td class="rfq-id">014</td><td class="date">2024-07-10</td><td>Dhaval Padhiyar</td><td>Vendor N</td><td class="amount">₹950.00</td></tr>
+                                <tr><td class="rfq-id">015</td><td class="date">2024-07-11</td><td>Manthan Panchal</td><td>Vendor O</td><td class="amount">₹850.00</td></tr>
+                                <tr><td class="rfq-id">016</td><td class="date">2024-07-12</td><td>Prince Patel</td><td>Vendor P</td><td class="amount">₹150.00</td></tr>
+                                <tr><td class="rfq-id">017</td><td class="date">2024-07-13</td><td>Khushal Parmar</td><td>Vendor Q</td><td class="amount">₹250.00</td></tr>
+                                <tr><td class="rfq-id">018</td><td class="date">2024-07-14</td><td>Darshil Chauhan</td><td>Vendor R</td><td class="amount">₹550.00</td></tr>
+                                <tr><td class="rfq-id">019</td><td class="date">2024-07-15</td><td>Darshan Solanki</td><td>Vendor S</td><td class="amount">₹350.00</td></tr>
+                                <tr><td class="rfq-id">020</td><td class="date">2024-07-16</td><td>Dhruvank Solanki</td><td>Vendor T</td><td class="amount">₹450.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Orders <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="orders-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('orders-table', 0)">
+                                        <div class="sort-button">
+                                            Order
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('orders-table', 1)">
+                                        <div class="sort-button">
+                                            Ordered On
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('orders-table', 2)">
+                                        <div class="sort-button">
+                                            Buyer
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('orders-table', 3)">
+                                        <div class="sort-button">
+                                            Vendor
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('orders-table', 4)">
+                                        <div class="sort-button">
+                                            Total Amount
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td class="order-id">101</td><td class="date">2024-06-20</td><td>Riddhi Gohel</td><td>Vendor X</td><td class="amount">₹900.00</td></tr>
+                                <tr><td class="order-id">102</td><td class="date">2024-06-21</td><td>Ashu Padhiyar</td><td>Vendor Y</td><td class="amount">₹450.00</td></tr>
+                                <tr><td class="order-id">103</td><td class="date">2024-06-22</td><td>Krishna Solanki</td><td>Vendor Z</td><td class="amount">₹300.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Vendors <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="vendors-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('vendors-table', 0)">
+                                        <div class="sort-button">
+                                            Vendor
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('vendors-table', 1)">
+                                        <div class="sort-button">
+                                            Orders
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('vendors-table', 2)">
+                                        <div class="sort-button">
+                                            Amount
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Vendor A</td><td>10</td><td class="amount">₹5000.00</td></tr>
+                                <tr><td>Vendor B</td><td>8</td><td class="amount">₹4000.00</td></tr>
+                                <tr><td>Vendor C</td><td>15</td><td class="amount">₹7500.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Buyers <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="buyers-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('buyers-table', 0)">
+                                        <div class="sort-button">
+                                            Buyer
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('buyers-table', 1)">
+                                        <div class="sort-button">
+                                            Orders
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('buyers-table', 2)">
+                                        <div class="sort-button">
+                                            Qty Ordered
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('buyers-table', 3)">
+                                        <div class="sort-button">
+                                            Amount
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Jaimen Darji</td><td>5</td><td>50</td><td class="amount">₹2500.00</td></tr>
+                                <tr><td>Aniket Gohel</td><td>3</td><td>30</td><td class="amount">₹1500.00</td></tr>
+                                <tr><td>samir Gohel</td><td>4</td><td>40</td><td class="amount">₹2000.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Products <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="products-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('products-table', 0)">
+                                        <div class="sort-button">
+                                            Product
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('products-table', 1)">
+                                        <div class="sort-button">
+                                            Qty Ordered
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('products-table', 2)">
+                                        <div class="sort-button">
+                                            Amount
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Teddy</td><td>100</td><td class="amount">₹1000.00</td></tr>
+                                <tr><td>Bottle</td><td>150</td><td class="amount">₹1500.00</td></tr>
+                                <tr><td>Headphone</td><td>200</td><td class="amount">₹2000.00</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
-    
-            <div class="scrollable-table">
-                <table>
-                    <caption>Top Partners</caption>
-                    <thead>
-                        <tr>
-                            <th>Partner</th>
-                            <th>Moves</th>
-                            <th>Quantity</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Partner X</td><td>10</td><td>1000</td></tr>
-                        <tr><td>Partner Y</td><td>12</td><td>1200</td></tr>
-                        <tr><td>Partner Z</td><td>15</td><td>1500</td></tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">Inventory Flow</div>
+            <div class="grid-container">
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Products <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="inventory-products-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('inventory-products-table', 0)">
+                                        <div class="sort-button">
+                                            Product
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('inventory-products-table', 1)">
+                                        <div class="sort-button">
+                                            Moves
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('inventory-products-table', 2)">
+                                        <div class="sort-button">
+                                            Quantity
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>T-shirt</td><td>5</td><td>500</td></tr>
+                                <tr><td>Jeans</td><td>7</td><td>700</td></tr>
+                                <tr><td>Toys</td><td>9</td><td>900</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Partners <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="partners-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('partners-table', 0)">
+                                        <div class="sort-button">
+                                            Partner
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('partners-table', 1)">
+                                        <div class="sort-button">
+                                            Moves
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('partners-table', 2)">
+                                        <div class="sort-button">
+                                            Quantity
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Partner X</td><td>10</td><td>1000</td></tr>
+                                <tr><td>Partner Y</td><td>12</td><td>1200</td></tr>
+                                <tr><td>Partner Z</td><td>15</td><td>1500</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     
-        <div class="section-title">Manufacturing</div>
-        <div class="grid-container">
-            <div class="scrollable-table">
-                <table>
-                    <caption>Top Products</caption>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Orders</th>
-                            <th>Qty Produced</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Product X</td><td>3</td><td>300</td></tr>
-                        <tr><td>Product Y</td><td>6</td><td>600</td></tr>
-                        <tr><td>Product Z</td><td>9</td><td>900</td></tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
-            </div>
-    
-            <div class="scrollable-table">
-                <table>
-                    <caption>Top Responsibles</caption>
-                    <thead>
-                        <tr>
-                            <th>Responsible</th>
-                            <th>Orders</th>
-                            <th>Qty Produced</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr><td>Manager 1</td><td>10</td><td>1000</td></tr>
-                        <tr><td>Manager 2</td><td>15</td><td>1500</td></tr>
-                        <tr><td>Manager 3</td><td>20</td><td>2000</td></tr>
-                        <!-- Add more rows as needed -->
-                    </tbody>
-                </table>
+        <div class="section">
+            <div class="section-title">Manufacturing</div>
+            <div class="grid-container">
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Products <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="manufacturing-products-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('manufacturing-products-table', 0)">
+                                        <div class="sort-button">
+                                            Product
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('manufacturing-products-table', 1)">
+                                        <div class="sort-button">
+                                            Orders
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('manufacturing-products-table', 2)">
+                                        <div class="sort-button">
+                                            Qty Produced
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Dairy</td><td>3</td><td>300</td></tr>
+                                <tr><td>Files</td><td>6</td><td>600</td></tr>
+                                <tr><td>Floor Mats</td><td>9</td><td>900</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+        
+                <div class="table-container">
+                    <div class="table-header">
+                        Top Responsibles <span class="stats-badge">3 Total</span>
+                    </div>
+                    <div class="scrollable-table">
+                        <table id="responsibles-table">
+                            <thead>
+                                <tr>
+                                    <th onclick="sortTable('responsibles-table', 0)">
+                                        <div class="sort-button">
+                                            Responsible
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('responsibles-table', 1)">
+                                        <div class="sort-button">
+                                            Orders
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                    <th onclick="sortTable('responsibles-table', 2)">
+                                        <div class="sort-button">
+                                            Qty Produced
+                                            <svg class="sort-icon" viewBox="0 0 24 24" fill="currentColor">
+                                                <path d="M7 14l5-5 5 5z"/>
+                                            </svg>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Manager 1</td><td>10</td><td>1000</td></tr>
+                                <tr><td>Manager 2</td><td>15</td><td>1500</td></tr>
+                                <tr><td>Manager 3</td><td>20</td><td>2000</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
     
-    </body>
-    </html>
+    <script>
+        // Sorting functionality
+        let sortStates = {};
+        
+        function sortTable(tableId, columnIndex) {
+            const table = document.getElementById(tableId);
+            const tbody = table.querySelector('tbody');
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const headers = table.querySelectorAll('th');
+            const currentHeader = headers[columnIndex];
+            const sortIcon = currentHeader.querySelector('.sort-icon');
+            
+            // Initialize sort state for this table-column if it doesn't exist
+            const sortKey = `${tableId}-${columnIndex}`;
+            if (!sortStates[sortKey]) {
+                sortStates[sortKey] = 'asc';
+            }
+            
+            // Reset all other sort icons in this table
+            headers.forEach((header, index) => {
+                if (index !== columnIndex) {
+                    const icon = header.querySelector('.sort-icon');
+                    icon.classList.remove('active', 'desc');
+                }
+            });
+            
+            // Toggle sort direction
+            const isAscending = sortStates[sortKey] === 'asc';
+            sortStates[sortKey] = isAscending ? 'desc' : 'asc';
+            
+            // Update icon
+            sortIcon.classList.add('active');
+            if (sortStates[sortKey] === 'desc') {
+                sortIcon.classList.add('desc');
+            } else {
+                sortIcon.classList.remove('desc');
+            }
+            
+            // Sort rows
+            rows.sort((a, b) => {
+                const aValue = a.cells[columnIndex].textContent.trim();
+                const bValue = b.cells[columnIndex].textContent.trim();
+                
+                // Check if values are numbers (including currency)
+                const aNum = parseFloat(aValue.replace(/[₹,]/g, ''));
+                const bNum = parseFloat(bValue.replace(/[₹,]/g, ''));
+                
+                let comparison = 0;
+                
+                if (!isNaN(aNum) && !isNaN(bNum)) {
+                    // Numeric comparison
+                    comparison = aNum - bNum;
+                } else if (aValue.match(/^\d{4}-\d{2}-\d{2}$/)) {
+                    // Date comparison
+                    comparison = new Date(aValue) - new Date(bValue);
+                } else {
+                    // String comparison
+                    comparison = aValue.localeCompare(bValue);
+                }
+                
+                return sortStates[sortKey] === 'asc' ? comparison : -comparison;
+            });
+            
+            // Clear tbody and append sorted rows
+            tbody.innerHTML = '';
+            rows.forEach(row => tbody.appendChild(row));
+            
+            // Add visual feedback
+            rows.forEach((row, index) => {
+                setTimeout(() => {
+                    row.style.transform = 'translateX(-10px)';
+                    setTimeout(() => {
+                        row.style.transform = 'translateX(0)';
+                    }, 50);
+                }, index * 20);
+            });
+        }
+        
+        // Add some interactive animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const tables = document.querySelectorAll('.table-container');
+            
+            // Intersection Observer for animation on scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            });
+            
+            tables.forEach(table => {
+                table.style.opacity = '0';
+                table.style.transform = 'translateY(30px)';
+                table.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(table);
+            });
+        });
+    </script>
     
+</body>
+</html>
